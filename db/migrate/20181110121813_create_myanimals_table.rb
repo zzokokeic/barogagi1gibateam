@@ -4,7 +4,7 @@ class CreateMyanimalsTable < ActiveRecord::Migration[5.2]
   		ma.integer	:user_id
   		ma.integer	:animal_id
   		ma.integer	:habit_id
-  		ma.integer	:coin_price
+  		ma.integer	:coin_paid
   		ma.integer	:growth_step
   		ma.boolean	:upgrade_done
   		ma.boolean	:is_deleted

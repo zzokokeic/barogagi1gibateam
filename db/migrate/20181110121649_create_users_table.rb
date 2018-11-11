@@ -4,10 +4,10 @@ class CreateUsersTable < ActiveRecord::Migration[5.2]
       u.string	:nickname
       u.string	:email
       u.string	:password
-      u.integer	:upgrade_password
+      u.string	:upgrade_password
       u.integer	:current_coin
       u.integer	:max_myanimal
-      u.datetime	:create_at
+      u.datetime	:created_at
   	end
   end
 end

@@ -199,3 +199,30 @@ post '/animal_upgrade' do
     myanimal.save
     myanimal.to_json
 end
+
+#########################이 아래는 한현상이 썼습니다. ##############################
+
+# Class로 Notice를 선언하고, title, created_at, content를 필드에 추가해야 함
+get '/get_notice' do
+    Notice.all.to_json
+end
+
+post '/logout' do
+    #이거 넣어야할까?    user = Device.find_by_token(params["token"]).user
+    Device.find_by_token(params["token"]).delete #확실히는 모르겠다.. 근데 여기서 궁금한 점: 토큰이 일치하지 않는 경우에는 자동 로그아웃되고 서비스 메인페이지로 이동시켜야 할 텐데, 이건 우리가 짠 코드에 없는 것 같다?
+end
+
+post '/secession' do
+    user = Device.find_by_token(params["token"]).user
+    if user.password != params["password"]
+        return "error_6".to_json # 패스워드를 못맞히는 놈들은 탈퇴시키면 안되니까.
+        else
+        # finalchance라고 해서, "정말 탈퇴하시겠습니까?" 문구에 yes or no를 선택하게 할 예정.
+        if finalchance.nil? # boolean으로 params가 안되는것같으니, nil여부로 해야겠다.
+            user.delete #맞남;;;
+        end
+    end
+end
+
+post '/notification'#정말 전혀모르겠다;
+do

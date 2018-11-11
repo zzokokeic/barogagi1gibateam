@@ -62,12 +62,12 @@ end
 # Function definition
 post '/sign_up' do #회원가입
     user = User.new
-    user.nickname = params["nickname"]
+    user.nickname = params["nickname"] 
  	user.email = params["email"]
  	user.password = params["password"]
  	user.upgrade_password = params["upgrade_password"]
- 	user.current_coin = params["current_coin"]
- 	user.max_myanimal = params["max_myanimal"]
+ 	user.current_coin = 0 #입력받는 값이 아니라 지정값 입니다!
+ 	user.max_myanimal = 5
  	user.created_at = Time.now
     user.save
 
@@ -78,8 +78,10 @@ post '/sign_up' do #회원가입
 
     device.to_json
 end
+     #uuid: 지구상에 하나 밖에 존재하지 않는 아이디로 토큰을 만들어줘야 함(추측불가해야함)
+     #uuid ruby
 
-post '/sign_in' do
+post '/sign_in' do #로그인
     user = User.where("id" => params["id"]).where("password" => params["password"]).take
 
     if user.nil?
@@ -129,7 +131,7 @@ get '/get_habit_list' do
     Habit.all.to_json
 end
 
-post '/buy_animal' do
+post '/buy_animal' do #물고기를 샀을 때 저장해야 할 정보들!
     user = Device.find_by_token(params["token"]).user
     animal = Animal.find(params["animal_id"])
     habit = Habit.find(params["habit_id"])
@@ -154,6 +156,7 @@ post '/buy_animal' do
     # myanimal = Myanimal.create("user"=>user, "coin_paid"=>animal.coin_price, "is_deleted"=>) # create = new + save
 
     #params data type = string!!
+    #to_i는 숫자로 변환. 혹시 숫자가 스트링으로 넘어올까봐 변환코드 넣어줌.
     user.coin_amount = user.coin_amount - animal.coin_price.to_i
     user.save
 

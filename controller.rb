@@ -224,7 +224,7 @@ post '/secession' do
     end
 end
 
-post '/notification'#정말 전혀모르겠다;
-do
+post '/notification' do #정말 전혀모르겠다;
+end
 
 #비밀번호 찾기

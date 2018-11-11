@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
     has_many :coinpayments
     has_many :animalpayments
     has_many :upgrades, through: :myanimal
+end
 =begin
     include BCrypt
 

@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
-require 'bcrypt'
+#require 'bcrypt'
 
 # DB definition
 # user, device, animalpayment, coinpayment, 

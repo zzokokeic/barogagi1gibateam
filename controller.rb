@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'bcrypt'
 
 # DB definition
 # user, device, animalpayment, coinpayment, 
@@ -10,7 +11,19 @@ class User < ActiveRecord::Base
     has_many :coinpayments
     has_many :animalpayments
     has_many :upgrades, through: :myanimal
+=begin
+    include BCrypt
+
+    def password
+        @password ||= Password.new(password_hash)
+    end
+
+    def password=(new_password)
+        @password = Password.create(new_password)
+        self.password_hash = @password
+    end
 end
+=end
 
 class Device < ActiveRecord::Base
 	belongs_to :user

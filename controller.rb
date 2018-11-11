@@ -60,7 +60,7 @@ end
 
 
 # Function definition
-post '/sign_up' do
+post '/sign_up' do #회원가입
     user = User.new
     user.nickname = params["nickname"]
  	user.email = params["email"]

@@ -226,3 +226,5 @@ end
 
 post '/notification'#정말 전혀모르겠다;
 do
+
+#비밀번호 찾기

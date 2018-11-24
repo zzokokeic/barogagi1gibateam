@@ -145,7 +145,7 @@ post '/buy_animal' do #error8
     myanimal.to_json
 end 
 
-# 정원준
+# WJchung
 post '/animal_upgrade' do #error9
     user = Device.find_by_token(params["token"]).user
     # myanimal = Myanimal.find(params["myanimal_id"])
@@ -154,12 +154,12 @@ post '/animal_upgrade' do #error9
     upgrade = Upgrade.new
 
     if params["upgrade_password"] != user.upgrade_password
-        return "error_3".to_json #업그레이드 비번 다름
+        return "error_9".to_json #wrong upgrade password
     end
 
     myanimal.growth_step += 1
     if myanimal.growth_step >= myanimal.animal.max_step
-        myanimal.growth_step = myanimal.animal.max_step # 안전장치
+        myanimal.growth_step = myanimal.animal.max_step # safety code
         myanimal.upgrade_done = true
     end
 
@@ -202,15 +202,15 @@ post '/notification' do #정말 전혀모르겠다; #error13
     # Fuse에서!
 end
 
-#비밀번호 찾기 #정원준
+#finding upgrade password #wjchung
 post '/get_lost_password' do #error14
-    user = Device.find_by_token(params["token"]).user  #유저 확인
+    user = Device.find_by_token(params["token"]).user  #check user
     password = params["password"]
 
-#비밀번호를 찾기를 누르면, 계정 비밀번호를 요구
-    if user.password == params["password"]  #계정 비밀 번호를 옳바르게 넣으면 업그레이드 비밀 번호를 알려준다
+#click find password and request input account password
+    if user.password == params["password"]  
         return user.upgrade_password.to_json
     else 
-        return "error_7".to_json #계정 비밀 번호를 잘못 입력했으면, 잘못 넣었다고 알려준다 
+        return "error_14".to_json #wrong upgrade password 
     end
 end

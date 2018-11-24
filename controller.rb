@@ -255,10 +255,10 @@ end
 #finding upgrade password #wjchung
 post '/get_lost_password' do #error14
     user = Device.find_by_token(params["token"]).user  #check user
-    password = params["password"]
+    password = params["password"] 
 
 #click find password and request input account password
-    if user.password == params["password"]  
+    if BCrypt::Password.new(user.password) == params["password"]  
         return user.upgrade_password.to_json
     else 
         return "error_14".to_json #wrong upgrade password 

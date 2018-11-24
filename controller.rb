@@ -90,9 +90,9 @@ end
 
 # duhee
 post '/buy_coin' do #error3
-    # 결제모듈과 연결
+    # link to module
     # https://www.iamport.kr/getstarted
-    # fuse에서!
+    # in fuse!
 end
 
 # duhee

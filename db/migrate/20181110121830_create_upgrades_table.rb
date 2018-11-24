@@ -3,7 +3,6 @@ class CreateUpgradesTable < ActiveRecord::Migration[5.2]
   	create_table :upgrades do |u|
   		u.integer	:myanimal_id
   		u.integer	:growth_step
-  		u.boolean	:upgrade_done
   		u.datetime	:created_at
   	end
   end

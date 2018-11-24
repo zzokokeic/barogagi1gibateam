@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 2018_11_11_150927) do
   create_table "upgrades", force: :cascade do |t|
     t.integer "myanimal_id"
     t.integer "growth_step"
-    t.boolean "upgrade_done"
     t.datetime "created_at"
   end
 

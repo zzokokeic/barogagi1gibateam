@@ -71,7 +71,7 @@ post '/sign_in' do # error_2
     end
 
     unless BCrypt::Password.new(user.password) == params["password"]
-        return "error_2_2" # 
+        return "error_2_2".to_json # 
     end
 
     device = Device.new
@@ -203,6 +203,9 @@ post '/animal_upgrade' do #error9
     if params["upgrade_password"] != user.upgrade_password
         return "error_9".to_json #wrong upgrade password
     end
+
+    if myanimal.growth_step = myanimal.animal.max_step 
+        return "error_9_1".to_json #fully upgraded and cannot further upgrade
 
     myanimal.growth_step += 1
     if myanimal.growth_step >= myanimal.animal.max_step

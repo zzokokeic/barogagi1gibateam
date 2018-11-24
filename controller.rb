@@ -204,6 +204,9 @@ post '/animal_upgrade' do #error9
         return "error_9".to_json #wrong upgrade password
     end
 
+    if myanimal.growth_step = myanimal.animal.max_step 
+        return "error_9_1".to_json #fully upgraded and cannot further upgrade
+
     myanimal.growth_step += 1
     if myanimal.growth_step >= myanimal.animal.max_step
         myanimal.growth_step = myanimal.animal.max_step # safety code

@@ -101,14 +101,14 @@ end
 # BCrypt::Password.new(a) == "1234"
 
 
-# 두희
+# duhee
 post '/buy_coin' do #error3
     # 결제모듈과 연결
     # https://www.iamport.kr/getstarted
     # fuse에서!
 end
 
-# 두희
+# duhee
 get '/get_coin_payment' do #error4
     user = Device.find_by_token(params["token"]).user
     # https://github.com/mislav/will_paginate

@@ -1,3 +1,4 @@
+require 'securerandom'
 
 # 공용으로 사용할 DB
 # for문으로 만들면 될 것 같음
@@ -12,6 +13,8 @@ for i in 1..9
     User.create("nickname"=>"유저#{i}", "email"=>"#{i}@gmail.com", \
         "password"=>"abc#{i}#{i}#{i}#{i}", "upgrade_password"=>"#{i}#{i}#{i}#{i}", \
         "current_coin"=>0, "max_myanimal"=>3, "created_at"=>Time.now())
+
+    Device.create("user_id" => i, "token" => SecureRandom.hex)
     
     ["5~6세","7~8세","9~10세"].each do |t|
         Habit.create("mission"=>"습관#{i}", "category"=>t)

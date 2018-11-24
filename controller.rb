@@ -59,14 +59,14 @@ end
 
 
 # 유원준
-post '/buy_coin' do
+post '/buy_coin' do #error3
     # 결제모듈과 연결
     # https://www.iamport.kr/getstarted
     # fuse에서!
 end
 
 # 유원준
-get '/get_coin_payment' do
+get '/get_coin_payment' do #error4
     user = Device.find_by_token(params["token"]).user
     # https://github.com/mislav/will_paginate
 
@@ -74,12 +74,16 @@ get '/get_coin_payment' do
 end
 
 # 진주
-get '/get_animal_list' do 
+get '/get_animal_list' do  #error5
+    if animal.nil?
+        return "error_5_1"
+    else
     Animal.all.to_json
+    end
 end
 
 # 진주 / 소리
-post '/get_my_animal_list' do
+post '/get_my_animal_list' do #error6
     user = Device.find_by_token(params["token"]).user
 
     animals = user.myanimals
@@ -99,12 +103,17 @@ post '/get_my_animal_list' do
 end
 
 # 진주
-get '/get_habit_list' do
+get '/get_habit_list' do #error7
+    
+    if habit.nil?
+        return "error_7_1"
+    else
     Habit.all.to_json
+    end
 end
 
 # 진주
-post '/buy_animal' do
+post '/buy_animal' do #error8
     user = Device.find_by_token(params["token"]).user
     animal = Animal.find(params["animal_id"])
     habit = Habit.find(params["habit_id"])
@@ -137,7 +146,7 @@ post '/buy_animal' do
 end 
 
 # 정원준
-post '/animal_upgrade' do
+post '/animal_upgrade' do #error9
     user = Device.find_by_token(params["token"]).user
     # myanimal = Myanimal.find(params["myanimal_id"])
     myanimal = user.myanimals.where("id" => params["myanimal_id"]).take
@@ -163,18 +172,18 @@ end
 
 # 현상
 # Class로 Notice를 선언하고, title, created_at, content를 필드에 추가해야 함
-get '/get_notice' do
+get '/get_notice' do #error10
     Notice.all.to_json
 end
 
 # 현상
-post '/logout' do
+post '/logout' do #error11
     #이거 넣어야할까?    user = Device.find_by_token(params["token"]).user
     Device.find_by_token(params["token"]).delete #확실히는 모르겠다.. 근데 여기서 궁금한 점: 토큰이 일치하지 않는 경우에는 자동 로그아웃되고 서비스 메인페이지로 이동시켜야 할 텐데, 이건 우리가 짠 코드에 없는 것 같다?
 end
 
 # 현상
-post '/secession' do
+post '/secession' do #error12
     user = Device.find_by_token(params["token"]).user
     if user.password != params["password"]
         return "error_6".to_json # 패스워드를 못맞히는 놈들은 탈퇴시키면 안되니까.
@@ -188,13 +197,13 @@ post '/secession' do
 end
 
 # 현상
-post '/notification' do #정말 전혀모르겠다;
+post '/notification' do #정말 전혀모르겠다; #error13
     # 안드로이드 / ios  완전 따로 짜야함
     # Fuse에서!
 end
 
 #비밀번호 찾기 #정원준
-post '/get_lost_password' do 
+post '/get_lost_password' do #error14
     user = Device.find_by_token(params["token"]).user  #유저 확인
     password = params["password"]
 

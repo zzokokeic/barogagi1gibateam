@@ -180,4 +180,21 @@ end
 post '/notification' do #정말 전혀모르겠다;
 end
 
-#비밀번호 찾기
+#비밀번호 찾기 #정원준
+post '/get_lost_password' do 
+    user = Device.find_by_token(params["token"]).user  #유저 확인
+    password = params["password"]
+
+    p = Post.new
+    p.password = password
+    p.save
+    
+#비밀번호를 찾기를 누르면, 계정 비밀번호를 요구
+    if user.password = params["password"]  #계정 비밀 번호를 옳바르게 넣으면 업그레이드 비밀 번호를 알려준다
+        puts upgrade_password.user
+        else 
+            return "error_7".to_json #계정 비밀 번호를 잘못 입력했으면, 잘못 넣었다고 알려준다 
+        end
+    end
+
+

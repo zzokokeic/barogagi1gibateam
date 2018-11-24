@@ -73,7 +73,7 @@ get '/get_coin_payment' do #error4
     user.coinpayments.to_json
 end
 
-# 진주
+# 소리
 get '/get_animal_list' do  #error5
     if animal.nil?
         return "error_5_1"
@@ -82,13 +82,13 @@ get '/get_animal_list' do  #error5
     end
 end
 
-# 진주 / 소리
+# 소리
 post '/get_my_animal_list' do #error6
     user = Device.find_by_token(params["token"]).user
 
     animals = user.myanimals
     if animals.nil?
-        return "error_7".to_json
+        return "error_6_1".to_json
     else
         if !params["is_deleted"].nil?
           animals = animals.where("is_deleted" => params["is_deleted"])
@@ -102,7 +102,7 @@ post '/get_my_animal_list' do #error6
     end
 end
 
-# 진주
+# 소리
 get '/get_habit_list' do #error7
     
     if habit.nil?

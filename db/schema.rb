@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2018_11_11_150927) do
     t.string "still_image"
     t.string "moving_image"
     t.integer "coin_price"
-    t.integer "growth_step"
+    t.integer "max_step"
   end
 
   create_table "coinpayments", force: :cascade do |t|

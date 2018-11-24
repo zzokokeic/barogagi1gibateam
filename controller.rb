@@ -1,14 +1,52 @@
 require 'sinatra'
 require './db_class.rb'
+require 'bcrypt'
 
 
 ############# Function definition
-# 석정
-post '/sign_up' do # error1
+# Sukjung
+post '/sign_up' do
+
+    if params["nickname"].nil?
+        return "error_1_1".to_json # Enter Nickname
+    elsif params["password"].nil?
+        return "error_1_2".to_json # Enter Password
+    elsif params["password_confirm"].nil?
+        return "error_1_3".to_json # Enter Password_confirm
+    elsif params["email"].nil?
+        return "error_1_4".to_json # Enter Email
+    elsif params["upgrade_password"].nil?
+        return "error_1_5".to_json # Enter Upgrade_password
+    end
+
+    unless User.where("nickname" => params["nickname"]).take.nil?
+        return "error_1_6".to_json # Nickname is in use. Enter another nickname.
+    end
+
+    unless User.where("email" => params["email"]).take.nil?
+        return "error_1_7".to_json # Email is in use. Enter another Email.
+    end
+
+    if params["nickname"].length < 2
+        return "error_1_8".to_json # Nickname should be longer than 2 syllables
+    end
+
+    if params["password"].length < 6
+        return "error_1_9".to_json # Password should be longer than 6 syllables
+    end
+
+    unless params["upgrade_password"].length == 4
+        return "error_1_10".to_json # Upgrade Password should be 4 syllables
+    end
+
+    unless params["password"] == params["password_confirm"]
+        return "error_1_11".to_json # Check the Password
+    end
+
     user = User.new
     user.nickname = params["nickname"]
     user.email = params["email"]
-    user.password = params["password"]
+    user.password = BCrypt::Password.create(params["password"])
     user.upgrade_password = params["upgrade_password"]
     user.current_coin = 0
     user.max_myanimal = 3
@@ -16,26 +54,31 @@ post '/sign_up' do # error1
     user.save
 
     device = Device.new
-    device.user = user # user db저장 이후 assign
+    device.user = user 
     device.token = SecureRandom.uuid #https://ruby-doc.org/stdlib-1.9.3/libdoc/securerandom/rdoc/SecureRandom.html
     device.save
 
-    device.to_json
+    return device.to_json
 end
 
-#석정
-post '/sign_in' do # error2
-    user = User.where("email" => params["email"]).where("password" => params["password"]).take
+#Sukjung
+post '/sign_in' do # error_2
+
+    user = User.find_by_email(params["email"])
 
     if user.nil?
-        return "error_1".to_json # 로그인 실패
+        return "error_2_1".to_json # 
+    end
+
+    unless BCrypt::Password.new(user.password) == params["password"]
+        return "error_2_2" # 
     end
 
     device = Device.new
     device.user = user
     device.token = SecureRandom.uuid
     device.save
-    device.to_json
+    return device.to_json
 end
 
 =begin

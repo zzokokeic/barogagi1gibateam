@@ -4,6 +4,7 @@ gem 'sinatra'
 gem 'rake'
 gem 'sinatra-activerecord'
 gem 'pg'
+gem 'bcrypt'
 
 group :development, :test do
   gem 'sqlite3'

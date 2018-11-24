@@ -21,13 +21,13 @@ for i in 1..9
     end
 
     Animal.create("still_image"=>"still#{i}", "moving_image"=>"moving#{i}", \
-        "coin_price"=>rand(3..7), "growth_step"=>rand(6..10))    
+        "coin_price"=>rand(3..7), "max_step"=>rand(6..10))    
 
     a=Animal.find_by_id(i)
     b=User.find_by_id(i)
     c=Habit.find_by_id(i)
     Myanimal.create("user_id"=>b.id, "animal_id"=>a.id, "habit_id"=>c.id, \
-         "coin_paid"=>a.coin_price, "growth_step"=>a.growth_step, "upgrade_done"=>false, "is_deleted"=>false, \
+         "coin_paid"=>a.coin_price, "growth_step"=>rand(1..5), "upgrade_done"=>false, "is_deleted"=>false, \
          "created_at"=>Time.now())
 
 end

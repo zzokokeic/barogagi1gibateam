@@ -139,8 +139,8 @@ post '/animal_upgrade' do
     end
 
     myanimal.growth_step += 1
-    if myanimal.growth_step >= myanimal.animal.growth_step
-        myanimal.growth_step = myanimal.animal.growth_step # 안전장치
+    if myanimal.growth_step >= myanimal.animal.max_step
+        myanimal.growth_step = myanimal.animal.max_step # 안전장치
         myanimal.upgrade_done = true
     end
 

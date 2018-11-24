@@ -58,14 +58,14 @@ end
 # BCrypt::Password.new(a) == "1234"
 
 
-# 유원준
+# 두희
 post '/buy_coin' do #error3
     # 결제모듈과 연결
     # https://www.iamport.kr/getstarted
     # fuse에서!
 end
 
-# 유원준
+# 두희
 get '/get_coin_payment' do #error4
     user = Device.find_by_token(params["token"]).user
     # https://github.com/mislav/will_paginate
@@ -82,29 +82,32 @@ get '/get_animal_list' do  #error5
     end
 end
 
-# 소리
+# 진주
 post '/get_my_animal_list' do #error6
     user = Device.find_by_token(params["token"]).user
 
-    animals = user.myanimals
-    if animals.nil?
-        return "error_6_1".to_json
+    if user.nil?
+        return "error6_1".to_json
     else
-        if !params["is_deleted"].nil?
-          animals = animals.where("is_deleted" => params["is_deleted"])
-        end
+        animals = user.myanimals
+        if animals.nil?
+            return "error_6_2".to_json
+        else
+            if !params["is_deleted"].nil?
+              animals = animals.where("is_deleted" => params["is_deleted"])
+            end
 
-        if !params["upgrade_done"].nil?
-          animals = animals.where("upgrade_done" => params["upgrade_done"])
-        end
+            if !params["upgrade_done"].nil?
+              animals = animals.where("upgrade_done" => params["upgrade_done"])
+            end
 
-        animals.to_json
+            return animals.to_json
+        end
     end
 end
 
 # 소리
 get '/get_habit_list' do #error7
-    
     if habit.nil?
         return "error_7_1"
     else

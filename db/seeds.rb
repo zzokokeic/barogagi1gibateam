@@ -1,4 +1,5 @@
 require 'securerandom'
+require 'bcrypt'
 
 # 공용으로 사용할 DB
 # for문으로 만들면 될 것 같음
@@ -10,10 +11,12 @@ require 'securerandom'
 #3depth: upgrade
 
 for i in 1..9
-    User.create("nickname"=>"유저#{i}", "email"=>"#{i}@gmail.com", \
+    user = User.create("nickname"=>"유저#{i}", "email"=>"#{i}@gmail.com", \
         "password"=>"abc#{i}#{i}#{i}#{i}", "upgrade_password"=>"#{i}#{i}#{i}#{i}", \
         "current_coin"=>10000, "max_myanimal"=>3, "created_at"=>Time.now())
-#    user.password = BCrypt::Password.create(params["user.password"]
+    user.password = BCrypt::Password.create(user.password)
+    user.save
+
     Device.create("user_id" => i, "token" => SecureRandom.hex)
     
     ["5~6세","7~8세","9~10세"].each do |t|

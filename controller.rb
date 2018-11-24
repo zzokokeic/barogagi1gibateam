@@ -70,6 +70,7 @@ post '/sign_in' do # error_2
         return "error_2_1".to_json # 
     end
 
+    puts user.password
     unless BCrypt::Password.new(user.password) == params["password"]
         return "error_2_2".to_json # 
     end

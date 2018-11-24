@@ -19,6 +19,7 @@ post '/sign_up' do
         return "error_1_5".to_json # Enter Upgrade_password
     end
 
+    # substring => @ and .
     unless User.where("nickname" => params["nickname"]).take.nil?
         return "error_1_6".to_json # Nickname is in use. Enter another nickname.
     end
@@ -69,7 +70,7 @@ post '/sign_in' do # error_2
     if user.nil?
         return "error_2_1".to_json # 
     end
-
+    
     unless BCrypt::Password.new(user.password) == params["password"]
         return "error_2_2".to_json # 
     end
@@ -81,34 +82,14 @@ post '/sign_in' do # error_2
     return device.to_json
 end
 
-=begin
-    include BCrypt
-
-    def password
-        @password ||= Password.new(password_hash)
-    end
-
-    def password=(new_password)
-        @password = Password.create(new_password)
-        self.password_hash = @password
-    end
-end
-=end
-
-# 암호화하는 방식(BCrypt)
-# require 'bcrypt'
-# a = BCrypt::Password.create("1234")
-# BCrypt::Password.new(a) == "1234"
-
-
-# 두희
+# duhee
 post '/buy_coin' do #error3
     # 결제모듈과 연결
     # https://www.iamport.kr/getstarted
     # fuse에서!
 end
 
-# 두희
+# duhee
 get '/get_coin_payment' do #error4
     user = Device.find_by_token(params["token"]).user
     # https://github.com/mislav/will_paginate
@@ -118,11 +99,7 @@ end
 
 # sori
 get '/get_animal_list' do  #error5
-    if Animal.nil?
-        return "error_5_1"
-    else
-        return Animal.all.to_json
-    end
+    return Animal.all.to_json
 end
 
 # jinju
@@ -130,7 +107,7 @@ post '/get_my_animal_list' do #error6
     user = Device.find_by_token(params["token"]).user
 
     if user.nil?
-        return "error6_1".to_json
+        return "error_6_1".to_json
     else
         animals = user.myanimals
         if animals.nil?
@@ -151,11 +128,7 @@ end
 
 # sori
 get '/get_habit_list' do #error7
-    if Habit.nil?
-        return "error_7_1"
-    else
-        return Habit.all.to_json
-    end
+    return Habit.all.to_json
 end
 
 # jinju
@@ -165,14 +138,14 @@ post '/buy_animal' do #error8
     habit = Habit.find(params["habit_id"])
 
     if user.nil?
-        return "error8_1".to_json
+        return "error_8_1".to_json
     elsif animal.nil?
-        return "error8_2".to_json
+        return "error_8_2".to_json
     elsif habit.nil?
-        return "error8_3".to_json
+        return "error_8_3".to_json
     else
         if user.current_coin < animal.coin_price
-            return "error8_4".to_json 
+            return "error_8_4".to_json 
         else
             myanimal = Myanimal.new
             myanimal.user = user
@@ -204,8 +177,9 @@ post '/animal_upgrade' do #error9
         return "error_9".to_json #wrong upgrade password
     end
 
-    if myanimal.growth_step = myanimal.animal.max_step 
+    if myanimal.growth_step == myanimal.animal.max_step 
         return "error_9_1".to_json #fully upgraded and cannot further upgrade
+    end
 
     myanimal.growth_step += 1
     if myanimal.growth_step >= myanimal.animal.max_step
@@ -220,45 +194,35 @@ post '/animal_upgrade' do #error9
     myanimal.to_json
 end
 
-# 현상
-# Class로 Notice를 선언하고, title, created_at, content를 필드에 추가해야 함
-get '/get_notice' do #error10
-    Notice.all.to_json
+#HHS
+get '/get_notice' do
+    return Notice.all.to_json
 end
 
-# 현상
-post '/logout' do #error11
-    #이거 넣어야할까?    user = Device.find_by_token(params["token"]).user
-    Device.find_by_token(params["token"]).delete #확실히는 모르겠다.. 근데 여기서 궁금한 점: 토큰이 일치하지 않는 경우에는 자동 로그아웃되고 서비스 메인페이지로 이동시켜야 할 텐데, 이건 우리가 짠 코드에 없는 것 같다?
+# HHS
+post '/logout' do
+    Device.find_by_token(params["token"]).delete
+    return true.to_json
 end
 
-# 현상
-post '/secession' do #error12
+# HHS
+post '/secession' do
     user = Device.find_by_token(params["token"]).user
     if user.password != params["password"]
-        return "error_6".to_json # 패스워드를 못맞히는 놈들은 탈퇴시키면 안되니까.
+        return "error_6".to_json
     else
-        # finalchance라고 해서, "정말 탈퇴하시겠습니까?" 문구에 yes or no를 선택하게 할 예정.
-        # if finalchance.nil? # boolean으로 params가 안되는것같으니, nil여부로 해야겠다.
-            user.delete #맞남;;;
+        user.delete
         return true.to_json 
-        # end
     end
 end
 
-# 현상
-post '/notification' do #정말 전혀모르겠다; #error13
-    # 안드로이드 / ios  완전 따로 짜야함
-    # Fuse에서!
-end
-
 #finding upgrade password #wjchung
-post '/get_lost_password' do #error14
+post '/find_lost_password' do #error14
     user = Device.find_by_token(params["token"]).user  #check user
-    password = params["password"]
+    password = params["password"] 
 
 #click find password and request input account password
-    if user.password == params["password"]  
+    if BCrypt::Password.new(user.password) == params["password"]  
         return user.upgrade_password.to_json
     else 
         return "error_14".to_json #wrong upgrade password 

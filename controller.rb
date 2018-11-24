@@ -4,18 +4,18 @@ require './db_class.rb'
 
 ############# Function definition
 # 석정
-post '/sign_up' do
+post '/sign_up' do # error_1
     user = User.new
     user.nickname = params["nickname"]
- 	user.email = params["email"]
- 	user.password = params["password"]
- 	user.upgrade_password = params["upgrade_password"]
- 	user.current_coin = 0
- 	user.max_myanimal = 3
- 	user.created_at = Time.now
+    user.email = params["email"]
+    user.password = params["password"]
+    user.upgrade_password = params["upgrade_password"]
+    user.current_coin = 0
+    user.max_myanimal = 3
+    user.created_at = Time.now
     user.save
 
-	device = Device.new
+    device = Device.new
     device.user = user # user db저장 이후 assign
     device.token = SecureRandom.uuid #https://ruby-doc.org/stdlib-1.9.3/libdoc/securerandom/rdoc/SecureRandom.html
     device.save
@@ -24,7 +24,7 @@ post '/sign_up' do
 end
 
 #석정
-post '/sign_in' do
+post '/sign_in' do # error_2
     user = User.where("email" => params["email"]).where("password" => params["password"]).take
 
     if user.nil?
@@ -52,10 +52,17 @@ end
 end
 =end
 
+# 암호화하는 방식(BCrypt)
+# require 'bcrypt'
+# a = BCrypt::Password.create("1234")
+# BCrypt::Password.new(a) == "1234"
+
+
 # 유원준
 post '/buy_coin' do
     # 결제모듈과 연결
     # https://www.iamport.kr/getstarted
+    # fuse에서!
 end
 
 # 유원준
@@ -72,20 +79,23 @@ get '/get_animal_list' do
 end
 
 # 진주 / 소리
-get '/get_my_animal_list' do
+post '/get_my_animal_list' do
     user = Device.find_by_token(params["token"]).user
 
     animals = user.myanimals
+    if animals.nil?
+        return "error_7".to_json
+    else
+        if !params["is_deleted"].nil?
+          animals = animals.where("is_deleted" => params["is_deleted"])
+        end
 
-    if !params["is_deleted"].nil?
-        animals = animals.where("is_deleted" => params["is_deleted"])
+        if !params["upgrade_done"].nil?
+          animals = animals.where("upgrade_done" => params["upgrade_done"])
+        end
+
+        animals.to_json
     end
-
-    if !params["upgrade_done"].nil?
-        animals = animals.where("upgrade_done" => params["upgrade_done"])
-    end
-
-    animals.to_json
 end
 
 # 진주
@@ -168,16 +178,19 @@ post '/secession' do
     user = Device.find_by_token(params["token"]).user
     if user.password != params["password"]
         return "error_6".to_json # 패스워드를 못맞히는 놈들은 탈퇴시키면 안되니까.
-        else
+    else
         # finalchance라고 해서, "정말 탈퇴하시겠습니까?" 문구에 yes or no를 선택하게 할 예정.
-        if finalchance.nil? # boolean으로 params가 안되는것같으니, nil여부로 해야겠다.
+        # if finalchance.nil? # boolean으로 params가 안되는것같으니, nil여부로 해야겠다.
             user.delete #맞남;;;
-        end
+        return true.to_json 
+        # end
     end
 end
 
 # 현상
 post '/notification' do #정말 전혀모르겠다;
+    # 안드로이드 / ios  완전 따로 짜야함
+    # Fuse에서!
 end
 
 #비밀번호 찾기 #정원준
@@ -185,16 +198,10 @@ post '/get_lost_password' do
     user = Device.find_by_token(params["token"]).user  #유저 확인
     password = params["password"]
 
-    p = Post.new
-    p.password = password
-    p.save
-    
 #비밀번호를 찾기를 누르면, 계정 비밀번호를 요구
-    if user.password = params["password"]  #계정 비밀 번호를 옳바르게 넣으면 업그레이드 비밀 번호를 알려준다
-        puts upgrade_password.user
-        else 
-            return "error_7".to_json #계정 비밀 번호를 잘못 입력했으면, 잘못 넣었다고 알려준다 
-        end
+    if user.password == params["password"]  #계정 비밀 번호를 옳바르게 넣으면 업그레이드 비밀 번호를 알려준다
+        return user.upgrade_password.to_json
+    else 
+        return "error_7".to_json #계정 비밀 번호를 잘못 입력했으면, 잘못 넣었다고 알려준다 
     end
-
-
+end

@@ -4,7 +4,7 @@ class CreateAnimalsTable < ActiveRecord::Migration[5.2]
   		a.string	:still_image
   		a.string	:moving_image
   		a.integer	:coin_price
-  		a.integer	:growth_step
+  		a.integer	:max_step
   	end
   end
 end

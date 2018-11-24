@@ -71,7 +71,7 @@ post '/sign_in' do # error_2
     end
 
     unless BCrypt::Password.new(user.password) == params["password"]
-        return "error_2_2" # 
+        return "error_2_2".to_json # 
     end
 
     device = Device.new

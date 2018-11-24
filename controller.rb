@@ -25,7 +25,7 @@ end
 
 #석정
 post '/sign_in' do
-    user = User.where("id" => params["id"]).where("password" => params["password"]).take
+    user = User.where("email" => params["email"]).where("password" => params["password"]).take
 
     if user.nil?
         return "error_1".to_json # 로그인 실패

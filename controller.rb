@@ -123,9 +123,9 @@ post '/buy_animal' do #error8
 
     if user.nil?
         return "error8_1".to_json
-    elsif animal.nil? || (Animal.min.id <= animal.id && animal.id <= Animal.max.id)
+    elsif animal.nil?
         return "error8_2".to_json
-    elsif habit.nil? || (Habit.min.id <= habit.id && habit.id <= Habit.max.id)
+    elsif habit.nil?
         return "error8_3".to_json
     else
         if user.current_coin < animal.coin_price

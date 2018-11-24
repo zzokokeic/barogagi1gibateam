@@ -12,7 +12,7 @@ require 'securerandom'
 for i in 1..9
     User.create("nickname"=>"유저#{i}", "email"=>"#{i}@gmail.com", \
         "password"=>"abc#{i}#{i}#{i}#{i}", "upgrade_password"=>"#{i}#{i}#{i}#{i}", \
-        "current_coin"=>0, "max_myanimal"=>3, "created_at"=>Time.now())
+        "current_coin"=>10000, "max_myanimal"=>3, "created_at"=>Time.now())
 
     Device.create("user_id" => i, "token" => SecureRandom.hex)
     

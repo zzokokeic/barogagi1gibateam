@@ -75,10 +75,10 @@ end
 
 # sori
 get '/get_animal_list' do  #error5
-    if animal.nil?
+    if Animal.nil?
         return "error_5_1"
     else
-    Animal.all.to_json
+        return Animal.all.to_json
     end
 end
 
@@ -108,10 +108,10 @@ end
 
 # sori
 get '/get_habit_list' do #error7
-    if habit.nil?
+    if Habit.nil?
         return "error_7_1"
     else
-    Habit.all.to_json
+        return Habit.all.to_json
     end
 end
 

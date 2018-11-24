@@ -44,7 +44,9 @@ post '/sign_up' do
         return "error_1_11".to_json # Check the Password
     end
 
-    unless params["email"].include? "@" && params["email"].include? "."
+    if !params["email"].include? "@" 
+        return "error_1_12" # Check Email address
+    elsif !params["email"].include? "."
         return "error_1_12" # Check Email address
     end
 

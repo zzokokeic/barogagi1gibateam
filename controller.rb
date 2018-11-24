@@ -4,7 +4,7 @@ require './db_class.rb'
 
 ############# Function definition
 # 석정
-post '/sign_up' do # error_1
+post '/sign_up' do # error1
     user = User.new
     user.nickname = params["nickname"]
     user.email = params["email"]
@@ -24,7 +24,7 @@ post '/sign_up' do # error_1
 end
 
 #석정
-post '/sign_in' do # error_2
+post '/sign_in' do # error2
     user = User.where("email" => params["email"]).where("password" => params["password"]).take
 
     if user.nil?
@@ -73,7 +73,7 @@ get '/get_coin_payment' do #error4
     user.coinpayments.to_json
 end
 
-# 소리
+# sori
 get '/get_animal_list' do  #error5
     if animal.nil?
         return "error_5_1"
@@ -82,7 +82,7 @@ get '/get_animal_list' do  #error5
     end
 end
 
-# 진주
+# jinju
 post '/get_my_animal_list' do #error6
     user = Device.find_by_token(params["token"]).user
 
@@ -106,7 +106,7 @@ post '/get_my_animal_list' do #error6
     end
 end
 
-# 소리
+# sori
 get '/get_habit_list' do #error7
     if habit.nil?
         return "error_7_1"
@@ -115,37 +115,38 @@ get '/get_habit_list' do #error7
     end
 end
 
-# 진주
+# jinju
 post '/buy_animal' do #error8
     user = Device.find_by_token(params["token"]).user
     animal = Animal.find(params["animal_id"])
     habit = Habit.find(params["habit_id"])
 
-    if animal.nil? || habit.nil?
-        return "error_5".to_json #유효한 값인지 체크
+    if user.nil?
+        return "error8_1".to_json
+    elsif animal.nil? || (Animal.min.id <= animal.id && animal.id <= Animal.max.id)
+        return "error8_2".to_json
+    elsif habit.nil? || (Habit.min.id <= habit.id && habit.id <= Habit.max.id)
+        return "error8_3".to_json
+    else
+        if user.current_coin < animal.coin_price
+            return "error8_4".to_json 
+        else
+            myanimal = Myanimal.new
+            myanimal.user = user
+            myanimal.coin_paid = animal.coin_price
+            myanimal.is_deleted = false
+            myanimal.upgrade_done = false
+            myanimal.growth_step = 0
+            myanimal.animal = animal
+            myanimal.habit = habit
+            myanimal.save
+
+            user.current_coin = user.current_coin - animal.coin_price.to_i
+            user.save
+
+            return myanimal.to_json
+        end
     end
-
-    if user.current_coin < animal.coin_price
-        return "error_1".to_json #결제연결은 fuse에서
-    end
-
-    myanimal = Myanimal.new
-    myanimal.user = user
-    myanimal.coin_paid = animal.coin_price
-    myanimal.is_deleted = false
-    myanimal.upgrade_done = false
-    myanimal.growth_step = 0
-    myanimal.animal = animal
-    myanimal.habit = habit
-    myanimal.save
-    # myanimal = Myanimal.create("user"=>user, "coin_paid"=>animal.coin_price, "is_deleted"=>) # create = new + save
-
-    #params data type = string!!
-    user.current_coin = user.current_coin - animal.coin_price.to_i
-    user.save
-
-    #마지막 라인이 퓨즈에게 넘겨짐!!
-    myanimal.to_json
 end 
 
 # WJchung

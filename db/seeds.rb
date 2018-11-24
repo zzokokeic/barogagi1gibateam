@@ -13,7 +13,7 @@ for i in 1..9
     User.create("nickname"=>"유저#{i}", "email"=>"#{i}@gmail.com", \
         "password"=>"abc#{i}#{i}#{i}#{i}", "upgrade_password"=>"#{i}#{i}#{i}#{i}", \
         "current_coin"=>10000, "max_myanimal"=>3, "created_at"=>Time.now())
-
+#    user.password = BCrypt::Password.create(params["user.password"]
     Device.create("user_id" => i, "token" => SecureRandom.hex)
     
     ["5~6세","7~8세","9~10세"].each do |t|

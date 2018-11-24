@@ -206,6 +206,7 @@ post '/animal_upgrade' do #error9
 
     if myanimal.growth_step = myanimal.animal.max_step 
         return "error_9_1".to_json #fully upgraded and cannot further upgrade
+    end
 
     myanimal.growth_step += 1
     if myanimal.growth_step >= myanimal.animal.max_step
@@ -220,40 +221,40 @@ post '/animal_upgrade' do #error9
     myanimal.to_json
 end
 
-# 현상
-# Class로 Notice를 선언하고, title, created_at, content를 필드에 추가해야 함
-get '/get_notice' do #error10
-    Notice.all.to_json
-end
-
-# 현상
-post '/logout' do #error11
-    #이거 넣어야할까?    user = Device.find_by_token(params["token"]).user
-    Device.find_by_token(params["token"]).delete #확실히는 모르겠다.. 근데 여기서 궁금한 점: 토큰이 일치하지 않는 경우에는 자동 로그아웃되고 서비스 메인페이지로 이동시켜야 할 텐데, 이건 우리가 짠 코드에 없는 것 같다?
-end
-
-# 현상
-post '/secession' do #error12
-    user = Device.find_by_token(params["token"]).user
-    if user.password != params["password"]
-        return "error_6".to_json # 패스워드를 못맞히는 놈들은 탈퇴시키면 안되니까.
+#HHS
+# have to create Class(Notice), Field(title, created_at, content)
+get '/get_notice' do
+    if Notice.nil?
+        return error_10_1.to_json
     else
-        # finalchance라고 해서, "정말 탈퇴하시겠습니까?" 문구에 yes or no를 선택하게 할 예정.
-        # if finalchance.nil? # boolean으로 params가 안되는것같으니, nil여부로 해야겠다.
-            user.delete #맞남;;;
-        return true.to_json 
-        # end
+        return Notice.all.to_json
     end
 end
 
-# 현상
-post '/notification' do #정말 전혀모르겠다; #error13
-    # 안드로이드 / ios  완전 따로 짜야함
-    # Fuse에서!
+# HHS
+post '/logout' do
+    Device.find_by_token(params["token"]).delete
+    return true.to_json
+end
+
+# HHS
+post '/secession' do
+    user = Device.find_by_token(params["token"]).user
+    if user.password != params["password"]
+        return "error_6".to_json
+    else
+        user.delete
+        return true.to_json 
+    end
+end
+
+# HHS
+post '/notification' do
+    # in App
 end
 
 #finding upgrade password #wjchung
-post '/get_lost_password' do #error14
+post '/find_lost_password' do #error14
     user = Device.find_by_token(params["token"]).user  #check user
     password = params["password"] 
 
